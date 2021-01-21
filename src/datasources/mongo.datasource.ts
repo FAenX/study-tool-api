@@ -1,15 +1,18 @@
 import {inject, lifeCycleObserver, LifeCycleObserver} from '@loopback/core';
 import {juggler} from '@loopback/repository';
+import dotenv from 'dotenv';
+
+dotenv.config()
 
 const config = {
   name: 'mongo',
   connector: 'mongodb',
   url: '',
-  host: '',
-  port: 0,
-  user: '',
-  password: '',
-  database: '',
+  host: process.env.MONGO_HOST,
+  port: 27017,
+  user: process.env.MONGO_USER,
+  password: process.env.MONGO_PASSWORD,
+  database: process.env.MONGO_DB,
   useNewUrlParser: true
 };
 
