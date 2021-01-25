@@ -1,14 +1,16 @@
 import {BootMixin} from '@loopback/boot';
 import {ApplicationConfig} from '@loopback/core';
-import {
-  RestExplorerBindings,
-  RestExplorerComponent,
-} from '@loopback/rest-explorer';
 import {RepositoryMixin} from '@loopback/repository';
 import {RestApplication} from '@loopback/rest';
+import {
+  RestExplorerBindings,
+  RestExplorerComponent
+} from '@loopback/rest-explorer';
 import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
+import {JwtServiceBindings} from './keys';
 import {MySequence} from './sequence';
+import {JwtService} from './services';
 
 export {ApplicationConfig};
 
@@ -40,5 +42,19 @@ export class StudyToolApplication extends BootMixin(
         nested: true,
       },
     };
+    this.setupBinding();
   }
+  setupBinding(): void {
+    // bind keys
+    this.bind(JwtServiceBindings.JwtServiceInstance)
+      .toClass(JwtService)
+
+    // //authorization
+    // this
+    //   .bind('authorizationProviders.my-authorizer-provider')
+    //   .toProvider(AuthorizationProvider)
+    //   .tag(AuthorizationTags.AUTHORIZER);
+
+
+  };
 }

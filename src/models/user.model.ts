@@ -21,6 +21,11 @@ export class User extends Entity {
   })
   password: string;
 
+  @property({
+    type: 'boolean',
+  })
+  verified?: boolean;
+
 
   constructor(data?: Partial<User>) {
     super(data);
