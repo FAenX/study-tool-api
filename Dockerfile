@@ -3,6 +3,7 @@ FROM node:10-slim
 
 # Set to a non-root built-in user `node`
 USER node
+#
 
 # Create app directory (with user `node`)
 RUN mkdir -p /home/node/app
