@@ -134,7 +134,7 @@ export class UserController {
   }
 
   @authenticate('jwt')
-  @get('/users/profile', {
+  @get('/users', {
     security: OPERATION_SECURITY_SPEC,
     responses: {
       '200': {
