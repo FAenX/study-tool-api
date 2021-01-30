@@ -1,3 +1,4 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Filter,
   repository
@@ -15,13 +16,16 @@ import {
   Activetable, User
 } from '../models';
 import {UserRepository} from '../repositories';
+import {OPERATION_SECURITY_SPEC} from '../utils/security-spec';
 
 export class UserActivetableController {
   constructor(
     @repository(UserRepository) protected userRepository: UserRepository,
   ) { }
 
+  @authenticate('jwt')
   @get('/users/{id}/activetable', {
+    security: OPERATION_SECURITY_SPEC,
     responses: {
       '200': {
         description: 'User has one Activetable',
@@ -40,7 +44,9 @@ export class UserActivetableController {
     return this.userRepository.activetable(id).get(filter);
   }
 
+  @authenticate('jwt')
   @post('/users/{id}/activetable', {
+    security: OPERATION_SECURITY_SPEC,
     responses: {
       '200': {
         description: 'User model instance',
