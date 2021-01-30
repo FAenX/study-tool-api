@@ -4,6 +4,7 @@ import {
   repository
 } from '@loopback/repository';
 import {
+  get,
   getModelSchemaRef,
   HttpErrors, param,
   patch, post,
@@ -132,35 +133,23 @@ export class UserController {
     return {token: token};
   }
 
-  // @authenticate('jwt')
-  // @get('/users/profile', {
-  //   security: OPERATION_SECURITY_SPEC,
-  //   responses: {
-  //     '200': {
-  //       description: 'User Profile',
-  //     },
-  //   },
-  // })
-  // async get(
-  //   @inject(SecurityBindings.USER)
-  //   currentUserProfile: UserProfile,
-  // ): Promise<Patient | Doctor | null | Pharmacy> {
-  //   if (currentUserProfile.role === 'client') {
-  //     return this.userRepository.patient(currentUserProfile.id).get();
-  //   }
-  //   if (currentUserProfile.role === 'doctor') {
-  //     return this.userRepository.doctor(currentUserProfile.id).get();
-  //   }
-  //   if (currentUserProfile.role === 'pharmacy') {
-  //     return this.userRepository.pharmacy(currentUserProfile.id).get();
-  //   }
-  //   if (currentUserProfile.role === 'admin') {
-  //     return null;
-  //   }
-  //   throw new HttpErrors.BadRequest('role not found')
+  @authenticate('jwt')
+  @get('/users/profile', {
+    security: OPERATION_SECURITY_SPEC,
+    responses: {
+      '200': {
+        description: 'User Profile',
+      },
+    },
+  })
+  async get(
+    @inject(SecurityBindings.USER)
+    currentUserProfile: UserProfile,
+  ): Promise<User> {
+    return this.userRepository.findById(currentUserProfile.id)
 
 
-  // }
+  }
 
 
   // change password
@@ -240,6 +229,7 @@ export class UserController {
     user.password = newPassword;
     await this.userRepository.updateById(id, user);
   }
+
 
   // reset token
   @post('/users/reset-token', {
