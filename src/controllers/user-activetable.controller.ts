@@ -78,10 +78,7 @@ export class UserActivetableController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Activetable, {
-            title: 'update active table',
-            exclude: ['id', 'dayOfYear', 'userId'],
-          }),
+          schema: getModelSchemaRef(Activetable, {partial: true}),
         },
       },
     })
