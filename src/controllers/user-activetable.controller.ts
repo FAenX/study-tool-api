@@ -41,11 +41,13 @@ export class UserActivetableController {
     user: UserProfile,
     @param.path.string('id') id: string,
   ): Promise<Activetable> {
+    const dayOfYear = getDayOfYear(new Date())
     const active = await this.userRepository.activetables(user.id).find({
       where: {
-        dayOfYear: getDayOfYear(new Date())
+        dayOfYear
       }
     });
+    console.log(active)
     if (active.length < 1){
      return this.userRepository.activetables(user.id).create({
         count: 0,
