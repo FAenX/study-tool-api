@@ -40,12 +40,19 @@ export class UserActivetableController {
     @inject(SecurityBindings.USER)
     user: UserProfile,
     @param.path.string('id') id: string,
-  ): Promise<Activetable[]> {
-    return this.userRepository.activetables(user.id).find({
+  ): Promise<Activetable> {
+    const active = await this.userRepository.activetables(user.id).find({
       where: {
         dayOfYear: getDayOfYear(new Date())
       }
     });
+    if (active.length < 1){
+     return this.userRepository.activetables(user.id).create({
+        count: 0,
+      })
+
+    }
+    return active[0]
 
   }
 }
