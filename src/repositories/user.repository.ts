@@ -1,7 +1,7 @@
-import {DefaultCrudRepository, repository, HasOneRepositoryFactory} from '@loopback/repository';
-import {User, UserRelations, Activetable} from '../models';
+import {Getter, inject} from '@loopback/core';
+import {DefaultCrudRepository, HasManyRepositoryFactory, HasOneRepositoryFactory, repository} from '@loopback/repository';
 import {MongoDataSource} from '../datasources';
-import {inject, Getter} from '@loopback/core';
+import {Activetable, User, UserRelations} from '../models';
 import {ActivetableRepository} from './activetable.repository';
 
 export class UserRepository extends DefaultCrudRepository<
@@ -12,11 +12,16 @@ export class UserRepository extends DefaultCrudRepository<
 
   public readonly activetable: HasOneRepositoryFactory<Activetable, typeof User.prototype.id>;
 
+  public readonly activetables: HasManyRepositoryFactory<Activetable, typeof User.prototype.id>;
+
   constructor(
-    @inject('datasources.mongo') dataSource: MongoDataSource, @repository.getter('ActivetableRepository') protected activetableRepositoryGetter: Getter<ActivetableRepository>,
+    @inject('datasources.mongo') dataSource: MongoDataSource,
+    @repository.getter('ActivetableRepository')
+    protected activetableRepositoryGetter: Getter<ActivetableRepository>,
   ) {
     super(User, dataSource);
-    this.activetable = this.createHasOneRepositoryFactoryFor('activetable', activetableRepositoryGetter);
-    this.registerInclusionResolver('activetable', this.activetable.inclusionResolver);
+    this.activetables = this.createHasManyRepositoryFactoryFor(
+      'activetables', activetableRepositoryGetter,);
+    this.registerInclusionResolver('activetables', this.activetables.inclusionResolver);
   }
 }

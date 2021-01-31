@@ -1,19 +1,18 @@
 import {authenticate} from '@loopback/authentication';
+import {inject} from '@loopback/core';
 import {
-  Filter,
   repository
 } from '@loopback/repository';
 import {
   get,
   getModelSchemaRef,
 
-  param,
-
-  post,
-  requestBody
+  param
 } from '@loopback/rest';
+import {SecurityBindings, UserProfile} from '@loopback/security';
+import {getDayOfYear} from 'date-fns';
 import {
-  Activetable, User
+  Activetable
 } from '../models';
 import {UserRepository} from '../repositories';
 import {OPERATION_SECURITY_SPEC} from '../utils/security-spec';
@@ -28,46 +27,25 @@ export class UserActivetableController {
     security: OPERATION_SECURITY_SPEC,
     responses: {
       '200': {
-        description: 'User has one Activetable',
+        description: 'Array of User has many Activetable',
         content: {
           'application/json': {
-            schema: getModelSchemaRef(Activetable),
+            schema: {type: 'array', items: getModelSchemaRef(Activetable)},
           },
         },
       },
     },
   })
-  async get(
+  async find(
+    @inject(SecurityBindings.USER)
+    user: UserProfile,
     @param.path.string('id') id: string,
-    @param.query.object('filter') filter?: Filter<Activetable>,
-  ): Promise<Activetable> {
-    return this.userRepository.activetable(id).get(filter);
-  }
+  ): Promise<Activetable[]> {
+    return this.userRepository.activetables(user.id).find({
+      where: {
+        dayOfYear: getDayOfYear(new Date())
+      }
+    });
 
-  @authenticate('jwt')
-  @post('/users/{id}/activetable', {
-    security: OPERATION_SECURITY_SPEC,
-    responses: {
-      '200': {
-        description: 'User model instance',
-        content: {'application/json': {schema: getModelSchemaRef(Activetable)}},
-      },
-    },
-  })
-  async create(
-    @param.path.string('id') id: typeof User.prototype.id,
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(Activetable, {
-            title: 'NewActivetableInUser',
-            exclude: ['id'],
-            optional: ['userId']
-          }),
-        },
-      },
-    }) activetable: Omit<Activetable, 'id'>,
-  ): Promise<Activetable> {
-    return this.userRepository.activetable(id).create(activetable);
   }
 }

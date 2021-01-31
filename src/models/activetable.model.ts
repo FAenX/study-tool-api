@@ -1,4 +1,5 @@
 import {Entity, model, property} from '@loopback/repository';
+import {getDayOfYear} from 'date-fns';
 
 @model()
 export class Activetable extends Entity {
@@ -14,6 +15,12 @@ export class Activetable extends Entity {
     default: 0
   })
   count?: number;
+
+  @property({
+    type: 'date',
+    default: getDayOfYear(new Date())
+  })
+  dayOfYear: number;
 
   @property({
     type: 'string',

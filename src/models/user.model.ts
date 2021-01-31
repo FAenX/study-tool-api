@@ -1,4 +1,4 @@
-import {Entity, model, property, hasOne} from '@loopback/repository';
+import {Entity, hasMany, model, property} from '@loopback/repository';
 import {Activetable} from './activetable.model';
 
 @model()
@@ -27,8 +27,8 @@ export class User extends Entity {
   })
   verified?: boolean;
 
-  @hasOne(() => Activetable)
-  activetable: Activetable;
+  @hasMany(() => Activetable)
+  activetables: Activetable[];
 
   constructor(data?: Partial<User>) {
     super(data);
