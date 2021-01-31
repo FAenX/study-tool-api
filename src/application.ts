@@ -1,3 +1,4 @@
+import {AuthenticationComponent, registerAuthenticationStrategy} from '@loopback/authentication';
 import {BootMixin} from '@loopback/boot';
 import {ApplicationConfig} from '@loopback/core';
 import {RepositoryMixin} from '@loopback/repository';
@@ -8,6 +9,7 @@ import {
 } from '@loopback/rest-explorer';
 import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
+import {JWTAuthenticationStrategy} from './authentication-strategies/jwt-strategy';
 import {JwtServiceBindings} from './keys';
 import {MySequence} from './sequence';
 import {JwtService} from './services';
@@ -31,6 +33,12 @@ export class StudyToolApplication extends BootMixin(
       path: '/explorer',
     });
     this.component(RestExplorerComponent);
+
+    // authentication component
+    this.component(AuthenticationComponent);
+    // Register the strategy
+    registerAuthenticationStrategy(this, JWTAuthenticationStrategy);
+
 
     this.projectRoot = __dirname;
     // Customize @loopback/boot Booter Conventions here
