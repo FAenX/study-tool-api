@@ -7,7 +7,9 @@ import {
   get,
   getModelSchemaRef,
 
-  param
+  param,
+  patch,
+  requestBody
 } from '@loopback/rest';
 import {SecurityBindings, UserProfile} from '@loopback/security';
 import {getDayOfYear} from 'date-fns';
@@ -56,5 +58,41 @@ export class UserActivetableController {
     }
     return active[0]
 
+  }
+  @authenticate('jwt')
+  @patch('/users/{id}/activetable', {
+    security: OPERATION_SECURITY_SPEC,
+    responses: {
+      '200': {
+        description: 'Array of User has many Activetable',
+        content: {
+          'application/json': {
+            schema: getModelSchemaRef(Activetable),
+          },
+        },
+      },
+    },
+  })
+  async update(
+    @param.path.string('id') id: string,
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(Activetable, {
+            title: 'update active table',
+            exclude: ['id', 'dayOfYear', 'userId'],
+          }),
+        },
+      },
+    })
+    table: Partial<Activetable>,
+    @inject(SecurityBindings.USER)
+    user: UserProfile,
+
+  ): Promise<void> {
+    const dayOfYear = getDayOfYear(new Date())
+    await this.userRepository.activetables(user.id).patch({count: table.count},
+      {dayOfYear: dayOfYear}
+    )
   }
 }
