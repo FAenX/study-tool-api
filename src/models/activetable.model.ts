@@ -17,7 +17,7 @@ export class Activetable extends Entity {
   count?: number;
 
   @property({
-    type: 'date',
+    type: 'number',
     default: getDayOfYear(new Date())
   })
   dayOfYear: number;
