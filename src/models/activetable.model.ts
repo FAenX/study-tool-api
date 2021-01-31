@@ -12,7 +12,7 @@ export class Activetable extends Entity {
 
   @property({
     type: 'number',
-    default: 0
+    default: -1
   })
   count?: number;
 

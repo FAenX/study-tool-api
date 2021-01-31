@@ -1,5 +1,5 @@
 import {Getter, inject} from '@loopback/core';
-import {DefaultCrudRepository, HasManyRepositoryFactory, HasOneRepositoryFactory, repository} from '@loopback/repository';
+import {DefaultCrudRepository, HasManyRepositoryFactory, repository} from '@loopback/repository';
 import {MongoDataSource} from '../datasources';
 import {Activetable, User, UserRelations} from '../models';
 import {ActivetableRepository} from './activetable.repository';
@@ -9,8 +9,6 @@ export class UserRepository extends DefaultCrudRepository<
   typeof User.prototype.id,
   UserRelations
 > {
-
-  public readonly activetable: HasOneRepositoryFactory<Activetable, typeof User.prototype.id>;
 
   public readonly activetables: HasManyRepositoryFactory<Activetable, typeof User.prototype.id>;
 
