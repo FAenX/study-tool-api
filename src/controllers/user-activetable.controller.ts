@@ -89,6 +89,7 @@ export class UserActivetableController {
 
   ): Promise<void> {
     const dayOfYear = getDayOfYear(new Date())
+    console.log(dayOfYear)
     await this.userRepository.activetables(user.id).patch({count: table.count},
       {dayOfYear: dayOfYear}
     )
