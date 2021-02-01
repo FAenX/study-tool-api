@@ -52,9 +52,7 @@ export class UserActivetableController {
     });
     console.log(active)
     if (active.length < 1){
-     return this.userRepository.activetables(user.id).create({
-        count: 0,
-      })
+     return this.userRepository.activetables(user.id).create({})
 
     }
     return active[0]
