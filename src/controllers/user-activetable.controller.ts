@@ -44,6 +44,7 @@ export class UserActivetableController {
     @param.path.string('id') id: string,
   ): Promise<Activetable> {
     const dayOfYear = getDayOfYear(new Date())
+    console.log(dayOfYear)
     const active = await this.userRepository.activetables(user.id).find({
       where: {
         dayOfYear
