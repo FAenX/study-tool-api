@@ -133,12 +133,21 @@ export class UserController {
     return {token: token};
   }
 
+
+
   @authenticate('jwt')
   @get('/users', {
     security: OPERATION_SECURITY_SPEC,
     responses: {
       '200': {
-        description: 'User Profile',
+        content: {
+          'application/json': {
+            schema: getModelSchemaRef(User, {
+              title: 'NewUser',
+              exclude: ['id', 'verified'],
+            }),
+          },
+        },
       },
     },
   })
