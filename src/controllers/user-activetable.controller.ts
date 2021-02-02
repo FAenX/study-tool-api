@@ -88,9 +88,14 @@ export class UserActivetableController {
   ): Promise<void> {
     const dayOfYear = getDayOfYear(new Date())
     console.log(dayOfYear)
-    const res = await this.userRepository.activetables(user.id).patch({count: table.count},
+    await this.userRepository.activetables(user.id).patch({count: table.count},
       {dayOfYear: dayOfYear}
     )
-    console.log(res)
+    const active = await this.userRepository.activetables(user.id).find({
+      where: {
+        dayOfYear
+      }
+    });
+    console.log(active)
   }
 }
