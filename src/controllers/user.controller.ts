@@ -118,14 +118,14 @@ export class UserController {
 
     const user = foundUser[0];
 
-    const passwordMatch = await compare(credentials.password, user.password + '');
+    const passwordMatch = await compare(credentials.password, user.password);
 
     if (!passwordMatch) {
       throw new HttpErrors.Unauthorized('Wrong password');
     }
 
     const userProfile = {
-      [securityId]: user.password + '',
+      [securityId]: user.password,
       id: user.id,
     };
     const token = await this.jwtService.generateToken(userProfile);
