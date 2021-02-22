@@ -1,4 +1,4 @@
-import {Entity, model, property} from '@loopback/repository';
+import {DataSource, Entity, model, property} from '@loopback/repository';
 import {getDayOfYear} from 'date-fns';
 
 @model()
@@ -15,6 +15,12 @@ export class Activetable extends Entity {
     default: null
   })
   count: number;
+
+  @property({
+    type: 'date',
+    default: new Date()
+  })
+  date: DataSource;
 
   @property({
     type: 'number',
