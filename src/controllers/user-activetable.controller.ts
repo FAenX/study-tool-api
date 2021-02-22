@@ -51,8 +51,8 @@ export class UserActivetableController {
       }
     });
     console.log(active)
-    if (active.length < 1){
-     return this.userRepository.activetables(user.id).create({})
+    if (active.length < 1) {
+      return this.userRepository.activetables(user.id).create({})
 
     }
     return active[0]
@@ -97,5 +97,31 @@ export class UserActivetableController {
       }
     });
     console.log(active)
+  }
+
+  @authenticate('jwt')
+  @get('/users/{id}/activetables', {
+    security: OPERATION_SECURITY_SPEC,
+    responses: {
+      '200': {
+        description: 'Array of User has many Activetable',
+        content: {
+          'application/json': {
+            schema: {type: 'array', items: getModelSchemaRef(Activetable)},
+          },
+        },
+      },
+    },
+  })
+  async findMany(
+    @inject(SecurityBindings.USER)
+    user: UserProfile,
+    @param.path.string('id') id: string,
+  ): Promise<Activetable[]> {
+
+    return this.userRepository.activetables(user.id).find();
+
+
+
   }
 }
